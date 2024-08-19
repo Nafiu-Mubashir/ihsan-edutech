@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.auth{
+    background-image: url('./assets/auth-bg-image.jpeg');
+}
+
+.login{
+    background-image: url('./assets/login-image.png');
+}
+
+.reg{
+    background-image: url('./assets/reg-image.png');
+}
