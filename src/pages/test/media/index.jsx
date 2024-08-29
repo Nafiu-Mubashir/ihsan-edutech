@@ -49,7 +49,7 @@ const MediaSetup = ({ onSetupComplete }) => {
                 )}
                 {videoEnabled && (
                     <div>
-                        <video ref={videoRef} autoPlay playsInline width="300"></video>
+                        <video ref={videoRef} autoPlay playsInline width="300" className='block mx-auto'></video>
                         {/* <p>Camera is enabled.</p> */}
                     </div>
                 )}
