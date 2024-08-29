@@ -5,6 +5,7 @@ import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import { useSelector, useDispatch } from "react-redux"; // Import useDispatch
 import { login } from "../../../lib/slice/authSlice"; // Ensure this is correctly imported
+import { toast } from "react-toastify";
 
 // Validation schema using Yup
 const validationSchema = Yup.object().shape({
@@ -39,8 +40,8 @@ const Login = () => {
 
               if (isAuthenticated) {
                 navigate('/test/user-test');
+                toast.success("login successfully")
               }
-              console.log('Form Submitted:', values);
             }}
           >
             {({ errors, getFieldProps }) => (
