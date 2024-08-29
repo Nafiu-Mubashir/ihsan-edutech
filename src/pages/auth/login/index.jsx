@@ -1,8 +1,10 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Button from "../../../components/button";
 import Input from "../../../components/input";
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
+import { useSelector, useDispatch } from "react-redux"; // Import useDispatch
+import { login } from "../../../lib/slice/authSlice"; // Ensure this is correctly imported
 
 // Validation schema using Yup
 const validationSchema = Yup.object().shape({
@@ -15,13 +17,17 @@ const validationSchema = Yup.object().shape({
 });
 
 const Login = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch(); // Initialize dispatch
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+
   return (
-    <div className=" bg-yellow-500 flex justify-center items-center h-screen auth bg-repeat bg-center bg-cover">
+    <div className="flex justify-center items-center h-screen auth bg-repeat bg-center bg-cover">
       <div className="grid grid-cols-2 w-[70%] h-[85vh] m-auto">
         <div className="bg-white rounded-l-xl login bg-repeat bg-center bg-cover">
           {/* <img src={loginImage} alt="" /> */}
         </div>
-        <div className="backdrop-blur-sm bg-black/40 rounded-r-xl p-10">
+        <div className="bg-glass rounded-r-xl p-10">
           <Formik
             initialValues={{
               email: '',
@@ -29,6 +35,11 @@ const Login = () => {
             }}
             validationSchema={validationSchema}
             onSubmit={(values) => {
+              dispatch(login({ email: values.email, password: values.password })); // Dispatch login action
+
+              if (isAuthenticated) {
+                navigate('/test/user-test');
+              }
               console.log('Form Submitted:', values);
             }}
           >
@@ -63,12 +74,12 @@ const Login = () => {
             )}
           </Formik>
           <p className="text-white text-center">
-            I did not have an account; <Link to='/auth/registration' className="text-[#D13900] underline">Create an account</Link>
+            I do not have an account; <Link to='/auth/registration' className="text-[#D13900] underline">Create an account</Link>
           </p>
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default Login
+export default Login;

@@ -1,16 +1,21 @@
 import { createBrowserRouter } from "react-router-dom";
-import { AnonymousRoot, Root } from "./App";
+import { AuthRoot, Root, UserTest } from "./App";
 import Error404 from "./pages/error/404";
 import Login from "./pages/auth/login";
 import ResetPassword from "./pages/auth/changePassword";
 import ForgotPassword from "./pages/auth/forgotPassword";
 import Registration from "./pages/auth/registrion";
-// import Dashboard from "./pages/dashboard";
+import Dashboard from "./pages/dashboard";
+import Instructors from "./pages/instructor";
+import Performance from "./pages/performance";
+import LeadBoard from "./pages/Leadboard";
+import Nahw from "./pages/courses/nahw";
+import Test from "./pages/test";
 
 export const Router = createBrowserRouter([
     {
-        path: "auth",
-        element: <AnonymousRoot />,
+        path: "/auth",
+        element: <AuthRoot />,
         errorElement: <Error404 />,
         children: [
             {
@@ -32,13 +37,45 @@ export const Router = createBrowserRouter([
         ],
     },
     {
+        path: "/test",
+        element: <UserTest />,
+        errorElement: <Error404 />,
+        children: [
+            {
+                path: "user-test",
+                element: <Test />,
+            },
+        ],
+    },
+    {
         path: "/",
         element: <Root />,
         errorElement: <Error404 />,
         children: [
             {
                 index: true,
-                element: <Login />,
+                element: <Dashboard />,
+            },
+            {
+                path: "instructor",
+                element: <Instructors />,
+            },
+            {
+                path: "performance",
+                element: <Performance />,
+            },
+            {
+                path: "lead-board",
+                element: <LeadBoard />,
+            },
+            {
+                path: "courses",
+                children: [
+                    {
+                        path: 'nahw',
+                        element: <Nahw />
+                    }
+                ]
             },
         ],
     },
