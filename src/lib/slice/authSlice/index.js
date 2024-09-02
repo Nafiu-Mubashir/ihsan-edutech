@@ -1,43 +1,62 @@
 import { createSlice } from '@reduxjs/toolkit';
+import Cookies from 'js-cookie';
 
 const initialState = {
-    isAuthenticated: false,
     user: null,
-    hasTakenTest: false,
+    token: null,
+    refreshToken: null,
+    isAuthenticated: false,
+    loading: false,
+    error: null,
 };
 
 const authSlice = createSlice({
     name: 'auth',
     initialState,
     reducers: {
-        login: (state, action) => {
-            const { email, password } = action.payload;
-            // In a real app, you'd check these credentials with a backend
-            if (email && password) {
-                state.isAuthenticated = true;
-                state.user = { email };
-                localStorage.setItem('user', JSON.stringify({ email }));
-            }
+        authStart(state) {
+            state.loading = true;
+            state.error = null;
         },
-        logout: (state) => {
+        authSuccess(state) {
+            state.loading = false;
+            state.error = null;
+        },
+        authUser(state, action) {
+            state.isAuthenticated = true;
+            state.user = action.payload.user;
+            state.token = action.payload.token;
+            state.refreshToken = action.payload.refreshToken;
+
+            // Store token, refresh token, and user data in cookies
+            Cookies.set('authToken', action.payload.token, { secure: true, sameSite: 'Strict' });
+            Cookies.set('authTokenRefresh', action.payload.refreshToken, { secure: true, sameSite: 'Strict' }); // Corrected this line
+            Cookies.set('user', JSON.stringify(action.payload.user), { secure: true, sameSite: 'Strict' });
+        },
+        authFailure(state, action) {
+            state.loading = false;
+            state.error = action.payload;
+        },
+        logout(state) {
             state.isAuthenticated = false;
             state.user = null;
-            state.hasTakenTest = false;
-            localStorage.removeItem('user');
-        },
-        loadUserFromStorage: (state) => {
-            const user = JSON.parse(localStorage.getItem('user'));
-            if (user) {
-                state.isAuthenticated = true;
-                state.user = user;
-            }
-        },
-        setTestStatus: (state, action) => {
-            state.hasTakenTest = action.payload;
+            state.token = null;
+            state.refreshToken = null;
+
+            // Remove all cookies related to auth
+            Cookies.remove('authToken');
+            Cookies.remove('authTokenRefresh'); // Make sure to remove the refresh token as well
+            Cookies.remove('user');
         },
     },
 });
 
-export const { login, logout, loadUserFromStorage, setTestStatus } = authSlice.actions;
+export const {
+    authStart,
+    authSuccess,
+    authUser,
+    authFailure,
+    logout,
+} = authSlice.actions;
 
 export default authSlice.reducer;

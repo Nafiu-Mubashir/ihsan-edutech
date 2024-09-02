@@ -11,6 +11,7 @@ import Performance from "./pages/performance";
 import LeadBoard from "./pages/Leadboard";
 import Nahw from "./pages/courses/nahw";
 import Test from "./pages/test";
+import Verification from "./pages/auth/verification";
 
 export const Router = createBrowserRouter([
     {
@@ -25,6 +26,10 @@ export const Router = createBrowserRouter([
             {
                 path: "registration",
                 element: <Registration />,
+            },
+            {
+                path: "verification",
+                element: <Verification />,
             },
             {
                 path: "reset-password",

@@ -4,8 +4,7 @@ import Input from "../../../components/input";
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import { useSelector, useDispatch } from "react-redux"; // Import useDispatch
-import { login } from "../../../lib/slice/authSlice"; // Ensure this is correctly imported
-import { toast } from "react-toastify";
+import { loginAction } from "../../../lib/slice/authSlice/authAction";
 
 // Validation schema using Yup
 const validationSchema = Yup.object().shape({
@@ -35,12 +34,13 @@ const Login = () => {
               password: '',
             }}
             validationSchema={validationSchema}
-            onSubmit={(values) => {
-              dispatch(login({ email: values.email, password: values.password })); // Dispatch login action
+            onSubmit={async (values) => {
+              console.log(values)
+              const res = await dispatch(loginAction({ email: values.email, password: values.password })); // Dispatch login action
+              console.log(res)
 
               if (isAuthenticated) {
                 navigate('/test/user-test');
-                toast.success("login successfully")
               }
             }}
           >

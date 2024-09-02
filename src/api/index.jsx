@@ -2,7 +2,7 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 
 const axiosInterceptor = axios.create({
-    baseURL: '',
+    baseURL: 'https://ihsanedtech.onrender.com/api/',
     withCredentials: true,
 });
 

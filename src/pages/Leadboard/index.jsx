@@ -1,7 +1,11 @@
+import Navbar from "../../components/navbar"
 
 const LeadBoard = () => {
   return (
-    <div>LeadBoard</div>
+    <div>
+      <Navbar />
+      LeadBoard
+    </div>
   )
 }
 

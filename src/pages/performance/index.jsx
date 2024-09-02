@@ -1,7 +1,11 @@
+import Navbar from "../../components/navbar"
 
 const Performance = () => {
   return (
-    <div>Performance</div>
+    <div>
+      <Navbar />
+      Performance
+    </div>
   )
 }
 
