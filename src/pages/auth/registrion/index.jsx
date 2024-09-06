@@ -3,13 +3,13 @@ import Button from "../../../components/button";
 import Input from "../../../components/input";
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
-import { registrationAction } from "../../../lib/slice/authSlice/authAction";
 import { useDispatch } from "react-redux";
+import { registrationAction } from "../../../lib/action/authAction";
 
 // Validation schema using Yup
 const validationSchema = Yup.object().shape({
-  firstname: Yup.string().required('Firstname is required'),
-  lastname: Yup.string().required('Lastname is required'),
+  first_name: Yup.string().required('Firstname is required'),
+  last_name: Yup.string().required('Lastname is required'),
   email: Yup.string()
     .email('Invalid email address')
     .required('Email is required'),
@@ -47,7 +47,7 @@ const Registration = () => {
               }
             }}
           >
-            {({ errors, getFieldProps }) => (
+            {({ errors, getFieldProps, isSubmitting }) => (
               <Form className="space-y-4 text-white">
                 <div>
                   <h2 className="text-[2.5rem] font-bold">Create Account</h2>
@@ -58,20 +58,20 @@ const Registration = () => {
                   <Input
                     label="Firstname"
                     type="text"
-                    name="firstname"
+                    name="first_name"
                     placeholder="Enter your firstname"
                     errors={errors}
-                    {...getFieldProps('firstname')} // Use Formik's getFieldProps
+                    {...getFieldProps('first_name')} // Use Formik's getFieldProps
                   />
 
                   {/* Lastname Field */}
                   <Input
                     label="Lastname"
                     type="text"
-                    name="lastname"
+                    name="last_name"
                     placeholder="Enter your lastname"
                     errors={errors}
-                    {...getFieldProps('lastname')} // Use Formik's getFieldProps
+                    {...getFieldProps('last_name')} // Use Formik's getFieldProps
                   />
                 </div>
 
@@ -111,7 +111,7 @@ const Registration = () => {
                   />
                 </div>
 
-                <Button type="submit" value="Register" />
+                <Button type="submit" value={isSubmitting ? "submitting...." : 'Register'} />
               </Form>
             )}
           </Formik>

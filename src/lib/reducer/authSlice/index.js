@@ -1,11 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
 import Cookies from 'js-cookie';
-
+const token = Cookies.get('authToken');
+const user = Cookies.get('user');
 const initialState = {
-    user: null,
-    token: null,
+    user: user,
+    token: token,
     refreshToken: null,
-    isAuthenticated: false,
     loading: false,
     error: null,
 };
@@ -23,14 +23,11 @@ const authSlice = createSlice({
             state.error = null;
         },
         authUser(state, action) {
-            state.isAuthenticated = true;
             state.user = action.payload.user;
             state.token = action.payload.token;
             state.refreshToken = action.payload.refreshToken;
-
-            // Store token, refresh token, and user data in cookies
             Cookies.set('authToken', action.payload.token, { secure: true, sameSite: 'Strict' });
-            Cookies.set('authTokenRefresh', action.payload.refreshToken, { secure: true, sameSite: 'Strict' }); // Corrected this line
+            Cookies.set('authTokenRefresh', action.payload.refreshToken, { secure: true, sameSite: 'Strict' });
             Cookies.set('user', JSON.stringify(action.payload.user), { secure: true, sameSite: 'Strict' });
         },
         authFailure(state, action) {
@@ -42,11 +39,26 @@ const authSlice = createSlice({
             state.user = null;
             state.token = null;
             state.refreshToken = null;
-
-            // Remove all cookies related to auth
             Cookies.remove('authToken');
-            Cookies.remove('authTokenRefresh'); // Make sure to remove the refresh token as well
+            Cookies.remove('authTokenRefresh');
             Cookies.remove('user');
+        },
+        loadUserFromCookies(state) {
+            const token = Cookies.get('authToken');
+            const refreshToken = Cookies.get('authTokenRefresh');
+            const user = Cookies.get('user') ? JSON.parse(Cookies.get('user')) : null;
+
+            if (token && user) {
+                // state.isAuthenticated = true;
+                state.token = token;
+                state.refreshToken = refreshToken;
+                state.user = user;
+            } else {
+                // state.isAuthenticated = false;
+                state.token = null;
+                state.refreshToken = null;
+                state.user = null;
+            }
         },
     },
 });
@@ -57,6 +69,7 @@ export const {
     authUser,
     authFailure,
     logout,
+    loadUserFromCookies,
 } = authSlice.actions;
 
 export default authSlice.reducer;

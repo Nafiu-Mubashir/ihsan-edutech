@@ -1,21 +1,45 @@
 import { Avatar } from "@chakra-ui/react";
 import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import PropTypes from 'prop-types';
 import {
     CaretDown,
     CaretUp,
 } from "@phosphor-icons/react";
+import { logout } from "../../lib/reducer/authSlice";
+import { useDispatch, useSelector } from "react-redux";
+import Cookies from 'js-cookie';
 
 const Sidebar = ({ isSidebarCollapsed, toggleSidebar }) => {
+    const dispatch = useDispatch()
     const [isUserManagementOpen, setIsUserManagementOpen] = useState(false);
     const location = useLocation();
     const whenActive = location.pathname;
+    const { token } = useSelector((state) => state.auth);
+    const navigate = useNavigate()
+    
+    const user = Cookies.get('user');
+    const parsedUser = JSON.parse(user); // Parse the string into an object
+    console.log(parsedUser.first_name);   // Now you can access first_name
+    // if (user) {
+    // } else {
+    //     console.log('User not found in cookies');
+    // }
+    
 
     const toggleUserManagementDropdown = (event) => {
         event.preventDefault();
         setIsUserManagementOpen(!isUserManagementOpen);
     };
+
+    const handleLogout = () => {
+        console.log(token);
+        
+       if (token) {
+           dispatch(logout())
+           navigate('/auth/login')
+       }
+    }
 
     const mainNavlink = [
         {
@@ -133,10 +157,10 @@ const Sidebar = ({ isSidebarCollapsed, toggleSidebar }) => {
         >
             <div className="space-y-4">
                 <div className={`flex ${isSidebarCollapsed ? 'justify-center' : 'gap-2 items-center'}`}>
-                    <Avatar size={isSidebarCollapsed ? "sm" : "md"} src='' name="Abbass Abdulmujeeb" />
+                    <Avatar size={isSidebarCollapsed ? "sm" : "md"} src='' name={`${parsedUser.first_name} ${parsedUser.last_name}`} />
                     {!isSidebarCollapsed && (
                         <div>
-                            <p className="text-sm">Abbass Abdulmujeeb</p>
+                            <p className="text-sm">{`${parsedUser.first_name} ${parsedUser.last_name}`}</p>
                             <p className="bg-white rounded-md p-1 text-black text-xs text-center w-20">Middle Class</p>
                         </div>
                     )}
@@ -195,7 +219,7 @@ const Sidebar = ({ isSidebarCollapsed, toggleSidebar }) => {
                     })}
                 </div>
             </div>
-            <div className={`space-y-2 ${isSidebarCollapsed ? 'text-center' : 'p-2'}`}>
+            <div className={`space-y-2 cursor-pointer ${isSidebarCollapsed ? 'text-center' : 'p-2'}`}>
                 <p className={`flex gap-1 items-center ${isSidebarCollapsed ? 'justify-center' : ''}`}>
                     <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <g clipPath="url(#clip0_79_460)">
@@ -211,7 +235,9 @@ const Sidebar = ({ isSidebarCollapsed, toggleSidebar }) => {
                     </svg>
                     {!isSidebarCollapsed && 'Help'}
                 </p>
-                <p className={`flex gap-1 items-center ${isSidebarCollapsed ? 'justify-center' : ''}`}>
+                <p className={`flex gap-1 items-center cursor-pointer ${isSidebarCollapsed ? 'justify-center' : ''}`} 
+                onClick={handleLogout}
+                >
                     <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <g clipPath="url(#clip0_79_464)">
                             <path d="M12.4985 5.83335C12.4884 4.02083 12.4081 3.03924 11.7678 2.39892C11.0355 1.66669 9.85701 1.66669 7.49998 1.66669L6.66665 1.66669C4.30963 1.66669 3.13111 1.66669 2.39888 2.39892C1.66665 3.13115 1.66665 4.30966 1.66665 6.66669L1.66665 13.3334C1.66665 15.6904 1.66665 16.8689 2.39888 17.6011C3.13111 18.3334 4.30963 18.3334 6.66665 18.3334L7.49998 18.3334C9.85701 18.3334 11.0355 18.3334 11.7678 17.6011C12.4081 16.9608 12.4884 15.9792 12.4985 14.1667" stroke="white" strokeWidth="1.5" strokeLinecap="round" />

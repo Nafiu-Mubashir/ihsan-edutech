@@ -3,37 +3,37 @@ import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 const data = [
     {
         name: 'Sun',
-        uv: 4,
+        uv: 0,
         amt: 0,
     },
     {
         name: 'Mon',
-        uv: 6,
+        uv: 0,
         amt: 0,
     },
     {
         name: 'Tue',
-        uv: 9,
+        uv: 0,
         amt: 0,
     },
     {
         name: 'Wed',
-        uv: 5,
+        uv: 0,
         amt: 0,
     },
     {
         name: 'Thur',
-        uv: 6,
+        uv: 0,
         amt: 0,
     },
     {
         name: 'Fri',
-        uv: 1,
+        uv: 0,
         amt: 0,
     },
     {
         name: 'Sat',
-        uv: 8,
+        uv: 0,
         amt: 0,
     },
 ];

@@ -4,7 +4,7 @@ import Input from "../../../components/input";
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import { useSelector, useDispatch } from "react-redux"; // Import useDispatch
-import { loginAction } from "../../../lib/slice/authSlice/authAction";
+import { loginAction } from "../../../lib/action/authAction";
 
 // Validation schema using Yup
 const validationSchema = Yup.object().shape({
@@ -23,11 +23,11 @@ const Login = () => {
 
   return (
     <div className="flex justify-center items-center h-screen auth bg-repeat bg-center bg-cover">
-      <div className="grid grid-cols-2 w-[70%] h-[85vh] m-auto">
-        <div className="bg-white rounded-l-xl login bg-repeat bg-center bg-cover">
+      <div className="grid grid-rows-1 md:grid-cols-2 md:w-[70%] h-[85vh] m-auto p-3">
+        <div className="bg-white rounded-l-xl login bg-repeat bg-center bg-cover hidden md:block">
           {/* <img src={loginImage} alt="" /> */}
         </div>
-        <div className="bg-glass rounded-r-xl p-10">
+        <div className="bg-glass rounded-r-xl p-5 md:p-10">
           <Formik
             initialValues={{
               email: '',
@@ -44,7 +44,7 @@ const Login = () => {
               }
             }}
           >
-            {({ errors, getFieldProps }) => (
+            {({ errors, getFieldProps, isSubmitting }) => (
               <Form className="space-y-6 text-white">
                 <div>
                   <h2 className="text-[2.5rem] font-bold">Login</h2>
@@ -70,7 +70,7 @@ const Login = () => {
                   {...getFieldProps('password')} // Use Formik's getFieldProps
                 />
 
-                <Button type={'submit'} value={'Login'} />
+                <Button type={'submit'} value={isSubmitting ? "submitting...." : 'Login'} />
               </Form>
             )}
           </Formik>

@@ -12,6 +12,7 @@
   "dependencies": {
     "@phosphor-icons/react": "^2.1.7",
     "i": "^0.3.7",
+    "jwt-decode": "^4.0.0",
     "npm": "^10.8.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
@@ -38,6 +39,7 @@
     "globals": "^15.9.0",
     "js-cookie": "^3.0.5",
     "postcss": "^8.4.41",
+    "react-media-recorder": "^1.7.1",
     "react-redux": "^9.1.2",
     "react-router": "^6.26.1",
     "react-router-dom": "^6.26.1",

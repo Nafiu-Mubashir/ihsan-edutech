@@ -4,8 +4,8 @@ import * as Yup from 'yup';
 import Button from "../../../components/button";
 import Input from "../../../components/input";
 import { CaretLeft } from "@phosphor-icons/react";
-import { Link } from "react-router-dom";
-import { emailVerificationAction } from "../../../lib/slice/authSlice/authAction";
+import { Link, useNavigate } from "react-router-dom";
+import { emailVerificationAction } from "../../../lib/action/authAction";
 
 // Validation schema using Yup
 const validationSchema = Yup.object().shape({
@@ -25,6 +25,7 @@ const validationSchema = Yup.object().shape({
 
 const Verification = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate(); // Initialize the useNavigate hook
   return (
     <div className="flex justify-center items-center h-screen auth bg-repeat bg-center bg-cover">
       <div className="grid grid-cols-2 w-[70%] h-[85vh] m-auto">
@@ -46,13 +47,12 @@ const Verification = () => {
               const res = await dispatch(emailVerificationAction({ confirmation_code })); // Dispatch verification action
               console.log(res);
 
-              // if (isAuthenticated) {
-              //   navigate('/test/user-test');
-              //   toast.success("Verification successful");
-              // }
+              if(res?.status === 200) {
+                  navigate('/test/user-test');
+              }
             }}
           >
-            {({ errors, getFieldProps }) => (
+            {({ errors, getFieldProps, isSubmitting }) => (
               <Form className="space-y-6 text-white">
                 <div className="flex">
                   <Link to={'/auth/registration'}>
@@ -74,7 +74,7 @@ const Verification = () => {
                 <p className="text-white text-sm text-center underline cursor-pointer">
                   Resend code
                 </p>
-                <Button type={'submit'} value={'Verify'} />
+                <Button type={'submit'} value={isSubmitting ? "submitting...." : 'Verify'} />
               </Form>
             )}
           </Formik>

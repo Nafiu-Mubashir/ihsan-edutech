@@ -9,11 +9,11 @@ import {
 } from 'recharts';
 
 const data = [
-    { module: 'Module 1', percentage: 85 },
-    { module: 'Module 2', percentage: 70 },
-    { module: 'Module 3', percentage: 50 },
-    { module: 'Module 4', percentage: 90 },
-    { module: 'Module 5', percentage: 60 },
+    { module: 'Module 1', percentage: 0 },
+    { module: 'Module 2', percentage: 0 },
+    { module: 'Module 3', percentage: 0 },
+    { module: 'Module 4', percentage: 0 },
+    { module: 'Module 5', percentage: 0 },
 ];
 
 const PerformanceChart = () => {

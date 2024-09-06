@@ -1,46 +1,67 @@
 import { Outlet, Navigate } from "react-router-dom";
 import Sidebar from "./components/sidebar";
-import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { loadUserFromCookies } from "./lib/reducer/authSlice";
 
 function AuthRoot() {
-  const {isAuthenticated} = useSelector((state) => state.auth);
+  const { token } = useSelector((state) => state.auth);
 
-  if (isAuthenticated) {
-    return <Navigate to="/" />; // Redirect authenticated users to the dashboard
+  // Redirect authenticated users (with token) to the dashboard
+  if (token) {
+    return <Navigate to="/" />;
   }
 
   return <Outlet />;
 }
+
 
 function UserTest() {
-  const { isAuthenticated, user } = useSelector((state) => state.auth);
+  const { token, user } = useSelector((state) => state.auth);
 
-  if (!isAuthenticated) {
-    return <Navigate to="/auth/login" />; // Redirect if not logged in
+  // Redirect if not logged in (no token)
+  if (!token) {
+    return <Navigate to="/auth/login" />;
   }
 
-  if (user) {
-    return <Navigate to="/" />; // Redirect to dashboard if the test has been taken
+  // If the user has completed the evaluation test, redirect to dashboard
+  if (user && user.eval_test) {
+    return <Navigate to="/" />;
   }
 
   return <Outlet />;
 }
 
+
 function Root() {
-  const { isAuthenticated, user } = useSelector((state) => state.auth);
+  const { token, user } = useSelector((state) => state.auth); // Only token and user now
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+  const dispatch = useDispatch();
+
+  // Load user info from cookies when the component mounts
+  useEffect(() => {
+    if (!token) {
+      dispatch(loadUserFromCookies()); // Load token & user if not already loaded
+    }
+  }, [token, dispatch]);
 
   const toggleSidebar = () => {
     setIsSidebarCollapsed(!isSidebarCollapsed);
   };
 
-  if (!isAuthenticated) {
-    return <Navigate to="/auth/login" />; // Redirect if not logged in
+  // If token is not available, redirect to login
+  if (!token) {
+    return <Navigate to="/auth/login" />;
   }
 
-  if (isAuthenticated && !user) {
-    return <Navigate to="/test/user-test" />; // Redirect to the test page if logged in but hasn't taken the test
+  // If token is available and user.eval_test is false, redirect to the test page
+  if (token && user && user.eval_test === false) {
+    return <Navigate to="/test/user-test" />;
+  }
+
+  // If token is available and user.eval_test is true, redirect to the dashboard
+  if (token && user && user.eval_test === true) {
+    return <Navigate to="/" />;
   }
 
   return (
@@ -52,11 +73,12 @@ function Root() {
       />
 
       {/* Main Dashboard */}
-      <main className="flex-grow rounded-xl border border-gray-300 bg-glass w-[55.188rem] h-">
+      <main className="flex-grow rounded-xl border border-gray-300 bg-glass w-[55.188rem]">
         <Outlet />
       </main>
     </div>
   );
 }
+
 
 export { Root, AuthRoot, UserTest };

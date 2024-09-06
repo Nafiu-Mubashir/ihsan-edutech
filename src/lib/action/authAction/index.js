@@ -1,7 +1,8 @@
 import Cookies from 'js-cookie';
 import { toast } from 'react-toastify'; // Assuming you're using react-toastify for notifications
-import { authStart, authUser, logout } from '..';
-import axiosInterceptor from '../../../../api';
+import { authStart, authUser, logout } from '../../reducer/authSlice';
+import axiosInterceptor from '../../../api';
+import { jwtDecode } from 'jwt-decode';
 
 export const loginAction = (obj) => async (dispatch) => {
     try {
@@ -10,11 +11,14 @@ export const loginAction = (obj) => async (dispatch) => {
         console.log(response.data);
 
         if (response?.status === 200) {
-            console.log('Access Token:', response.data.access); // Debugging
-            console.log('Refresh Token:', response.data.refresh); // Debugging
-            console.log('User Data:', response.data.user); // Debugging
-
-            dispatch(authUser({ token: response.data.access, refreshToken: response.data.refresh, user: response.data.user }));
+            // console.log('Access Token:', response.data.access); // Debugging
+            // console.log('Refresh Token:', response.data.refresh); // Debugging
+            // console.log('User Data:', response.data.user); // Debugging
+            // Decode the token
+            const decoded = jwtDecode(response.data.access);
+            console.log(decoded);
+            
+            dispatch(authUser({ token: response.data.access, refreshToken: response.data.refresh, user: decoded }));
             toast.success('Login successfully');
         } else {
             toast.error(response?.data?.message);
@@ -23,8 +27,10 @@ export const loginAction = (obj) => async (dispatch) => {
 
         return response;
     } catch (error) {
-        toast.error(error?.response?.data?.detail);
-        console.error(error?.response?.data?.detail);
+        console.log(error);
+        
+        // toast.error(error?.response?.data?.detail);
+        // console.error(error?.response?.data?.detail);
     }
 };
 
@@ -62,7 +68,6 @@ export const emailVerificationAction = (obj) => async (dispatch) => {
         dispatch(authStart());
         const res = await axiosInterceptor.post('account/confirm/', obj)
         if (res?.status === 201) {
-            console.log(res);
             toast.success(res?.data?.message);
         }
 
@@ -71,6 +76,20 @@ export const emailVerificationAction = (obj) => async (dispatch) => {
     } catch (error) {
         console.log(error);
 
+    }
+}
+
+export const completeTestAction = async (id) => {
+    try {
+        const res = await axiosInterceptor.put(`account/${id}/update-status/`)
+        if (res?.status === 200) {
+            toast.success("Test completed successfully");
+        }
+
+        return res
+
+    } catch (error) {
+        console.log(error);
     }
 }
 

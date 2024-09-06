@@ -41,7 +41,7 @@ const MediaSetup = ({ onSetupComplete }) => {
     };
 
     return (
-        <div className='w-[40%] bg-glass mx-auto text-white border mt-[50px p-10 rounded-lg'>
+        <div className='w-[70%] md:w-[40%] bg-glass mx-auto text-white border mt-[50px p-10 rounded-lg'>
             <div className='border rounded-lg space-y-4 p-5 bg-ihsan'>
                 <h2 className='text-center'>Setup your Camera and Microphone</h2>
                 {!videoEnabled && (

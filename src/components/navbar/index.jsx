@@ -9,8 +9,12 @@ import {
     MenuList,
 } from "@chakra-ui/react";
 import { Bell, CaretDown, MagnifyingGlass } from "@phosphor-icons/react";
+import Cookies from 'js-cookie';
 
 const Navbar = () => {
+
+    const user = Cookies.get('user');
+    const parsedUser = JSON.parse(user); 
   return (
     <div>
           <div className="bg-ihsan border-none rounded-t-xl p-3 flex justify-between items-center">
@@ -45,7 +49,7 @@ const Navbar = () => {
                   </div>
                   <Menu className="!z-20">
                       <MenuButton rightIcon={<CaretDown size="20" />}>
-                          <Avatar src="" name="Abbass Abdulmujeeb" />
+                          <Avatar src="" name={`${parsedUser.first_name} ${parsedUser.last_name}`} />
                       </MenuButton>
                       <MenuList sx={{ bg: "!bg-ihsan" }}>
                           <MenuItem

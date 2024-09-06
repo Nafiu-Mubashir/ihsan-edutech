@@ -15,6 +15,7 @@ import {
 
 
 const Dashboard = () => {
+ 
   const overviewCard = [
     {
       icon: <User size={32} weight="fill" />,
@@ -34,7 +35,7 @@ const Dashboard = () => {
     {
       icon: <BookOpenText size={32} weight="fill" />,
       title: 'Module Taken',
-      subTtile: '20 Modules',
+      subTtile: '0 Modules',
     },
     {
       icon: <BookOpenText size={32} weight="fill" />,
@@ -44,28 +45,13 @@ const Dashboard = () => {
   ]
 
   const data = [
-    {
-      name: 'AbdulWahab Tolani',
-      percentage: '90%',
-    },
-    {
-      name: 'AbdulWahab Tolani',
-      percentage: '90%',
-    },
-    {
-      name: 'AbdulWahab Tolani',
-      percentage: '90%',
-    },
-    {
-      name: 'AbdulWahab Tolani',
-      percentage: '90%',
-    },
+    
   ]
   return (
     <>
       <Navbar />
 
-      <div className="p-3 w-[100%] space-y-3">
+      <div className="p-3 w-[100%] space-y-3 h-[83vh] overflow-y-scroll">
         <div className="flex justify-between gap-1">
           {
             overviewCard.map(({ icon, title, subTtile }, id) => (
@@ -80,7 +66,7 @@ const Dashboard = () => {
           }
         </div>
 
-        <div className="grid grid-cols-2 gap-4 h-[67vh] overflow-hidden">
+        <div className="grid grid-cols-2 gap-4 h-[67vh] ">
           <div className="grid grid-rows-2">
             <div className="w-full border h-[297px] p-2 rounded-md bg-ihsan">
               <TimeChart />
@@ -90,12 +76,12 @@ const Dashboard = () => {
                 <h1 className="font-bold">Lead board</h1>
                 <p className="text-sm">This is ranked based on the performance of student in the middle class</p>
               </div>
-              <TableContainer className='!rounded-md !w-[full] h-1/2 !text-white !overflow-auto'>
+              <TableContainer className='!rounded-md !w-[full] h-1/2 !text-white'>
                 <Table variant='simple' size={'md'}>
-                  <Thead className='bg-glass text-white'>
+                  <Thead className='bg-glass !text-white'>
                     <Tr>
-                      <Th>Name</Th>
-                      <Th>%</Th>
+                      <Th className="!text-white">Name</Th>
+                      <Th className="!text-white">%</Th>
                     </Tr>
                   </Thead>
                   <Tbody>
@@ -114,11 +100,30 @@ const Dashboard = () => {
             <div className="w-full border h-[333px] p-2 rounded-md bg-ihsan">
               <PerformanceChart />
             </div>
-            <div className="w-full border h-[267px] overflow-auto p-2 rounded-md bg-ihsan mb-5">
+            <div className="w-full border h-[267px] overflow-auto p-2 rounded-md bg-ihsan mb-5 space-y-3">
               <div className="text-white">
                 <h1 className="font-bold">Badge</h1>
                 <p className="text-sm">View all badge earned</p>
               </div>
+              <TableContainer className='!rounded-md !w-[full] h-1/2 !text-white'>
+                <Table variant='simple' size={'md'}>
+                  <Thead className='bg-glass !text-white'>
+                    <Tr>
+                      <Th className="!text-white">Module</Th>
+                      <Th className="!text-white">Date Attempted</Th>
+                      <Th className="!text-white">Badge Earned</Th>
+                    </Tr>
+                  </Thead>
+                  <Tbody>
+                    {data.map(({ name, percentage }, id) => (
+                      <Tr key={id} className='text-center'>
+                        <Td>{name}</Td>
+                        <Td>{percentage}</Td>
+                      </Tr>
+                    ))}
+                  </Tbody>
+                </Table>
+              </TableContainer>
             </div>
           </div>
         </div>

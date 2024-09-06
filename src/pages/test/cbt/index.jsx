@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-
+// import { ReactMediaRecorder } from 'react-media-recorder';
+import Cookies from 'js-cookie';
 
 const questions = [
     {
@@ -55,13 +56,24 @@ const questions = [
     },
 ];
 
+// const oralTestQuestions = [
+//     "Recite the following:",
+//     "1. ٱلْحَمْدُ لِلَّهِ رَبِّ ٱلْعَٰلَمِينَ",
+//     "2. ٱلرَّحْمَٰنِ ٱلرَّحِيمِ",
+//     "3. قُلْ هُوَ لِلَّذِينَ آمَنُوا هُدًى وَشِفَاءٌ",
+//     "4. هُدًى لِّلنَّاسِ وَبَيِّنَٰتٍ مِّنَ ٱلۡهُدَىٰ وَٱلۡفُرۡقَانِۚ",
+//     "5. ٱهْدِنَا ٱلصِّرَٰطَ ٱلْمُسْتَقِيمَ",
+//     "6. وَمَنْ يَتَوَكَّلْ عَلَى اللَّهِ فَهُوَ حَسْبُهُ",
+// ];
+
 const CBTTest = ({ onFinish }) => {
     const [currentQuestion, setCurrentQuestion] = useState(0);
     const [selectedAnswers, setSelectedAnswers] = useState(Array(questions.length).fill(null));
     const [score, setScore] = useState(0);
     const [showScore, setShowScore] = useState(false);
     const [timeLeft, setTimeLeft] = useState(15 * 60); // 15 minutes in seconds
-    
+    // const [recording, setRecording] = useState(false);
+    // const [isRecordingFinished, setIsRecordingFinished] = useState(false);
 
     useEffect(() => {
         const timer = setInterval(() => {
@@ -104,12 +116,12 @@ const CBTTest = ({ onFinish }) => {
             }
         });
         setScore(score);
+        Cookies.set('score', score)
     };
 
     const handleFinishTest = () => {
         calculateScore();
         setShowScore(true);
-        
     };
 
     const progress = ((currentQuestion + 1) / questions.length) * 100;
@@ -126,13 +138,12 @@ const CBTTest = ({ onFinish }) => {
     };
 
     return (
-        <div className='w-[50%] bg-glass mx-auto text-white border mt-[50px p-10 rounded-lg'>
+        <div className='w-[80%] md:w-[50%] bg-glass mx-auto text-white border mt-[50px] p-10 rounded-lg'>
             <div className='border rounded-lg space-y-4 p-5 bg-ihsan'>
                 <h1 className='font-bold text-center'>IHSAN TEST</h1>
                 {showScore ? (
                     <div className="text-center space-y-4">
                         <p>You scored {score} out of {questions.length}</p>
-                        {/* <button onClick={() => setShowScore(false)}>Show Score</button> */}
                         <button onClick={onFinish} className='appearance-none block w-1/2 blcok mx-auto cursor-pointer bg-gradient-to-t from-[#F84401] to-[#FE7A48] border-[#D13900] shadow-md text-white border rounded py-2 px-4 mb-3 leading-tight focus:outline-none'>Proceed to Dashboard</button>
                     </div>
                 ) : (
@@ -172,9 +183,47 @@ const CBTTest = ({ onFinish }) => {
                             </button>
 
                             <button className='appearance-none block w-full cursor-pointer bg-gradient-to-t from-[#F84401] to-[#FE7A48] border-[#D13900] shadow-md text-white border rounded py-2 px-4 mb-3 leading-tight focus:outline-none' onClick={allQuestionsAnswered ? handleFinishTest : handleNext}>
-                                {allQuestionsAnswered ? 'Finish Test' : 'Next'}
+                                {allQuestionsAnswered ? 'Finish' : 'Next'}
                             </button>
                         </div>
+{/* 
+                        {!isRecordingFinished && (
+                            <div className="mt-5">
+                                <ReactMediaRecorder
+                                    video
+                                    onStart={() => setRecording(true)}
+                                    onStop={() => {
+                                        setRecording(false);
+                                        setIsRecordingFinished(true);
+                                    }}
+                                    render={({ startRecording, stopRecording }) => (
+                                        <div className="flex flex-col items-center">
+                                            <div className="bg-white text-black p-4 rounded mb-4">
+                                                <h3 className="text-center font-bold mb-2">Oral Test Instructions</h3>
+                                                {oralTestQuestions.map((question, index) => (
+                                                    <p key={index}>{question}</p>
+                                                ))}
+                                            </div>
+                                            <button
+                                                className="appearance-none block w-full cursor-pointer bg-gradient-to-t from-[#F84401] to-[#FE7A48] border-[#D13900] shadow-md text-white border rounded py-2 px-4 mb-3 leading-tight focus:outline-none"
+                                                onClick={recording ? stopRecording : startRecording}
+                                            >
+                                                {recording ? 'Stop Recording' : 'Start Recording'}
+                                            </button>
+                                        </div>
+                                    )}
+                                />
+                            </div>
+                        )} */}
+{/* 
+                        {isRecordingFinished && (
+                            <button
+                                onClick={handleFinishTest}
+                                className="appearance-none block w-full cursor-pointer bg-gradient-to-t from-[#F84401] to-[#FE7A48] border-[#D13900] shadow-md text-white border rounded py-2 px-4 mt-5 leading-tight focus:outline-none"
+                            >
+                                Finish Test
+                            </button>
+                        )} */}
                     </div>
                 )}
             </div>
